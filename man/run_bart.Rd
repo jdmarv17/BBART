@@ -55,6 +55,6 @@ library(janitor)
 data(birthwt)
 data = birthwt \%>\% dplyr::select(., -low)
 formula = bwt ~ .
-bart_run = run_bart(formula, data)
+bart_run = run_bart(formula, data, num_chains = 1, num_threads_bart = 1, num_threads_wrangle = 1)
 
 }

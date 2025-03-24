@@ -26,7 +26,7 @@
 #' data(birthwt)
 #' data = birthwt %>% dplyr::select(., -low)
 #' formula = bwt ~ .
-#' bart_run = run_bart(formula, data)
+#' bart_run = run_bart(formula, data, num_chains = 1, num_threads_bart = 1, num_threads_wrangle = 1)
 #'
 run_bart = function(formula, data,
                     num_trees = 50, num_samps = 5000, num_burn = 5000,
@@ -57,14 +57,25 @@ run_bart = function(formula, data,
   # get rid of terminal nodes (THIS IS FIRST RETURN OBJECT)
   filtered_trees = bart_trees[bart_trees$var != -1,]
 
+
+  if (num_chains == 1) {
+    var_list =
+      filtered_trees %>%
+      dplyr::group_by(.data$tree, .data$sample) %>%
+      dplyr::group_split() %>% # list of filtered_tree tibbles by chain, tree, sample
+      parallel::mclapply(function(x) x[,"var"], mc.cores = num_threads_wrangle) %>% # select only var column
+      lapply(unlist) %>% # get as vector
+      lapply(unname) # get rid of names
+  } else{
   # split up by chain, tree, sample to take advantage of mclapply
   var_list =
     filtered_trees %>%
-    dplyr::group_by(., chain, tree, sample) %>%
+    dplyr::group_by(.data$chain, .data$tree, .data$sample) %>%
     dplyr::group_split() %>% # list of filtered_tree tibbles by chain, tree, sample
-    parallel::mclapply(., function(x) x[,"var"], mc.cores = num_threads_wrangle) %>% # select only var column
-    lapply(., unlist) %>% # get as vector
-    lapply(., unname) # get rid of names
+    parallel::mclapply(function(x) x[,"var"], mc.cores = num_threads_wrangle) %>% # select only var column
+    lapply(unlist) %>% # get as vector
+    lapply(unname) # get rid of names
+  }
 
   # run through make_indicators() with mclapply
   indicator_list = parallel::mclapply(X = var_list, FUN = make_indicators,
