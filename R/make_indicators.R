@@ -7,10 +7,6 @@
 #'
 #' @keywords internal
 #'
-#' @examples
-#' var_indices = c(1, 4, 5, 10)
-#' p = 10
-#' indicators = make_indicators(var_indices, p)
 #'
 make_indicators = function(var_indices, p) {
 

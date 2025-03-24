@@ -12,7 +12,7 @@
 #' @param prior_power Power parameter for tree prior.
 #' @param prior_base Base parameter for tree prior.
 #'
-#' @return A list of three objects. Object (1) is an indicator data frame of variable tree inclusion, object (2) is a data frame of posterior trees without terminal nodes, and object (3) is the dbarts::bart2 object
+#' @return A list of three objects. Object (1) is an indicator data frame of variable tree inclusion, object (2) is a data frame of posterior trees without terminal nodes, and object (3) is the dbarts::bart2 object.
 #'
 #' @importFrom rlang .data
 #' @export
@@ -26,11 +26,7 @@
 #' data(birthwt)
 #' data = birthwt %>% dplyr::select(., -low)
 #' formula = bwt ~ .
-#' dbarts_data = dbartsData(formula, data)
-#' dbarts_x = clean_names(dbarts_data@x)
-#' dbarts_y = dbarts_data@y
-#' vars = colnames(dbarts_x)
-#' bart_run = run_bart(formula, data, vars = vars)
+#' bart_run = run_bart(formula, data)
 #'
 run_bart = function(formula, data,
                     num_trees = 50, num_samps = 5000, num_burn = 5000,

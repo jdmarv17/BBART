@@ -20,7 +20,7 @@
 #' @param min_quantile if min_method = "quantile", a value for quantile to use
 #' @param manual_breaks An optional vector of manual break values.
 #'
-#' @returns
+#' @returns A list of three objects. Object (1) is an indicator data frame of variable tree inclusion, object (2) is a data frame of posterior trees without terminal nodes, and object (3) is the dbarts::bart2 object.
 #' @export
 #'
 #' @examples
@@ -40,7 +40,7 @@ fbart = function(y, x, func_data_list,
                  manual_breaks) {
 
   # get b spline coefs
-  bspline = get_bspline_coefs(data = func_data_list, time_points = time_points,
+  bspline = get_bspline_coefs(func_data_list = func_data_list, time_points = time_points,
                               break_spacing = break_spacing, n_breaks = n_breaks,
                               lambda_vals = lambda_vals, min_method = "mean", num_threads = num_threads_wrangle)
   data_df = cbind(y = y, x, bspline$coef_df) # "y"
