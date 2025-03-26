@@ -10,7 +10,7 @@
 #' @returns A list of two objects. Object (1) is an fdSmooth object using object (2) lambda_opt to smooth.
 #' @export
 #'
-#' @examples
+#'
 #'
 smooth_w_gcv = function(covar_df, basis, time_points,
                         lambda_vals, min_method = "mean", quantile) {

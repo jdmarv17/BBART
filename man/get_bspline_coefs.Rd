@@ -41,3 +41,20 @@ A list of four objects. Object (1) is a data frame of fitted B-spline coefficien
 \description{
 Function to get fitted B-spline coefficients for smoothed functional covariates
 }
+\examples{
+
+library(fds)
+library(fda)
+library(dplyr)
+
+data("Fatspectrum")
+data_list = list(fat = Fatspectrum$y) # list elements must be named
+observed_wavelengths = Fatspectrum$x
+
+fit_bspline = get_bspline_coefs(func_data_list = data_list, time_points = observed_wavelengths,
+                                n_breaks = 10, lambda_vals = 10^seq(-6, 6, length.out = 250),
+                                min_method = "mean", num_threads = 1)
+
+
+
+}

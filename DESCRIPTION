@@ -16,6 +16,7 @@ Imports:
     rlang,
     stats
 Suggests: 
+    fds,
     janitor,
     MASS
 Encoding: UTF-8

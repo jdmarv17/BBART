@@ -24,8 +24,19 @@
 #' @export
 #'
 #' @examples
-#'
-#'
+#' library(fds)
+#' library(fda)
+#' library(dplyr)
+
+#' data("Fatspectrum")
+#' data_list = list(fat = Fatspectrum$y) # list elements must be named
+#' observed_wavelengths = Fatspectrum$x
+#' y = unname(Fatvalues)
+
+#' fbart_run = fbart(y = y, func_data_list = data_list, time_points = observed_wavelengths,
+#'                   num_trees = 100, num_samps = 5000, num_burn = 5000, num_thin = 5, num_chains = 1,
+#'                   num_threads_bart = 1, num_threads_wrangle = 1, break_spacing = "quantiles",
+#'                   n_breaks = 10, lambda_vals = 10^seq(-6, 6, length.out = 250), min_method = "mean")
 #'
 #'
 fbart = function(y, x, func_data_list,
@@ -43,7 +54,14 @@ fbart = function(y, x, func_data_list,
   bspline = get_bspline_coefs(func_data_list = func_data_list, time_points = time_points,
                               break_spacing = break_spacing, n_breaks = n_breaks,
                               lambda_vals = lambda_vals, min_method = "mean", num_threads = num_threads_wrangle)
-  data_df = cbind(y = y, x, bspline$coef_df) # "y"
+
+  # if available bind scalar covariates with outcome and bspline coefficients
+  if (!missing(x)) {
+    data_df = cbind(y = y, x, bspline$coef_df)
+  } else {
+    data_df = cbind(y = y, bspline$coef_df)
+  }
+
 
   # bart formula
   formula = as.formula(

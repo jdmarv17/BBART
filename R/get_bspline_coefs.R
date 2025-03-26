@@ -14,6 +14,21 @@
 #' @export
 #'
 #' @examples
+#'
+#' library(fds)
+#' library(fda)
+#' library(dplyr)
+#'
+#' data("Fatspectrum")
+#' data_list = list(fat = Fatspectrum$y) # list elements must be named
+#' observed_wavelengths = Fatspectrum$x
+#'
+#' fit_bspline = get_bspline_coefs(func_data_list = data_list, time_points = observed_wavelengths,
+#'                                 n_breaks = 10, lambda_vals = 10^seq(-6, 6, length.out = 250),
+#'                                 min_method = "mean", num_threads = 1)
+#'
+#'
+#'
 get_bspline_coefs = function(func_data_list, time_points, break_spacing = "quantiles",
                              n_breaks = 10, lambda_vals = 10^seq(-6, 6, length.out = 100),
                              min_method = "mean", min_quantile,
