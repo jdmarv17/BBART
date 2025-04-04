@@ -1,0 +1,50 @@
+---
+title: "fBART-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fBART-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r message=FALSE}
+# load libraries and data 
+library(fBART)
+library(fds)
+library(fda)
+library(dplyr)
+data("Fatspectrum")
+```
+
+```{r}
+# set up data
+
+# functional covariate
+data_list = list(fat = Fatspectrum$y) # list elements must be named
+
+# functional covariate domain - wavelength
+observed_wavelengths = Fatspectrum$x
+
+# outcome values
+y = unname(Fatvalues)
+```
+
+
+```{r}
+# run fBART
+fbart_run = fbart(y = y, func_data_list = data_list, time_points = observed_wavelengths,
+                  num_trees = 100, num_samps = 5000, num_burn = 5000, num_thin = 5, num_chains = 1,
+                  num_threads_bart = 1, num_threads_wrangle = 1, break_spacing = "quantiles",
+                  n_breaks = 14, lambda_vals = 10^seq(-8, 8, length.out = 250), min_method = "mean")
+
+# examine posterior TIPs
+colMeans(fbart_run[[1]])
+```
+
