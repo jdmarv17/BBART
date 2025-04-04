@@ -22,7 +22,7 @@ mice_irradiation
 This data comes from a Center for Medical Countermeasures Against Radiation Center funded
 project to develop radiation exposure biomarkers and diagnostics for use in directing medical
 treatment following a radiological incident where the radiation dose an individual is exposed to
-would be unknown. C57Bl/6J mice, male and female, at 8 weeks of age, were exposed to
+would be unknown. C3H/HeJ mice, male and female, at 8 weeks of age, were exposed to
 total body plus whole thorax irradiation using a 137Cs γ-ray source, or as a control received
 no irradiation with identical handling (sham irradiation). Respiratory measures were recorded
 over time using whole body plethysmography. The goal of the data collection were to develop a
