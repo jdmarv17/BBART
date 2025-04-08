@@ -34,25 +34,6 @@ get_bspline_coefs = function(func_data_list, time_points, break_spacing = "quant
                              min_method = "mean", min_quantile,
                              num_threads = parallel::detectCores(),
                              manual_breaks) {
-  # This function fits a smooth function to noisy functional data using WLS with a roughness
-  # penalty. We assume that subjects are observed at the same time points
-  ##### Return 1: a data frame of b-spline coefficients for all functional covariates
-  ##### Return 2: a list of the smoothed covariate fd objects
-  ##### Return 3: the optimal lambda for penalizing roughness
-  ##### Return 4: the basis object used
-  # ARGS:
-  # `func_data_list` = list of functional data frame (1 for each covariate), each data frame should have a column
-  # for each subject and rows representing the values over time
-  # NOTE: DATA LIST MUST HAVE NAMED ENTRIES
-  # `time_points` = a vector of time points i.e. 1:nrow(data[[1]])
-  # `break_spacing` = a value in c("quantiles", "equal", "manual") to set break spacing
-  # `n_breaks` = a number indicating number of breaks to use
-  # `lambda_vals` = a vector of positive numbers to cross-validate over to get roughness penalty
-  # `min_method` = value to minimize during cross-validation, either "mean" or "quantile
-  # `min_quantile` = if min_method = "quantile", a value for quantile to use
-  # `num_threads` = number of threads to use for processing
-  # `manual_breaks` = if break_spacing = "manual", a vector of breaks to use, must include first and last time point
-
 
   # specify evenly spaced breaks or breaks at evenly spaced quantiles
   if (break_spacing == "quantiles") {
