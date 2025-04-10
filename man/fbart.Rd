@@ -6,7 +6,7 @@
 \usage{
 fbart(
   y,
-  x,
+  x = NULL,
   func_data_list,
   num_trees = 100,
   num_samps = 5000,
@@ -22,8 +22,8 @@ fbart(
   n_breaks = 8,
   lambda_vals = 10^seq(-6, 6, length.out = 100),
   min_method = "mean",
-  min_quantile,
-  manual_breaks
+  manual_breaks = NULL,
+  min_quantile = NULL
 )
 }
 \arguments{
@@ -61,9 +61,9 @@ fbart(
 
 \item{min_method}{A value to minimize during cross-validation, either "mean" or "quantile" (over the subjects GCV values)}
 
-\item{min_quantile}{if min_method = "quantile", a value for quantile to use}
+\item{manual_breaks}{An optional vector of manual break values. Must include domain endpoints.}
 
-\item{manual_breaks}{An optional vector of manual break values.}
+\item{min_quantile}{if min_method = "quantile", a value for quantile to use}
 }
 \value{
 A list of three objects. Object (1) is an indicator data frame of variable tree inclusion, object (2) is a data frame of posterior trees without terminal nodes, and object (3) is the dbarts::bart2 object.

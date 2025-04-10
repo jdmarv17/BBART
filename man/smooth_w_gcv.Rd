@@ -10,7 +10,7 @@ smooth_w_gcv(
   time_points,
   lambda_vals,
   min_method = "mean",
-  quantile
+  quantile = NULL
 )
 }
 \arguments{

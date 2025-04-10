@@ -11,9 +11,9 @@ get_bspline_coefs(
   n_breaks = 10,
   lambda_vals = 10^seq(-6, 6, length.out = 100),
   min_method = "mean",
-  min_quantile,
+  min_quantile = NULL,
   num_threads = parallel::detectCores(),
-  manual_breaks
+  manual_breaks = NULL
 )
 }
 \arguments{

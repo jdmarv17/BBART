@@ -18,7 +18,7 @@
 #' @param lambda_vals A vector of positive numbers to cross-validate over to get roughness penalty.
 #' @param min_method A value to minimize during cross-validation, either "mean" or "quantile" (over the subjects GCV values)
 #' @param min_quantile if min_method = "quantile", a value for quantile to use
-#' @param manual_breaks An optional vector of manual break values.
+#' @param manual_breaks An optional vector of manual break values. Must include domain endpoints.
 #'
 #' @returns A list of three objects. Object (1) is an indicator data frame of variable tree inclusion, object (2) is a data frame of posterior trees without terminal nodes, and object (3) is the dbarts::bart2 object.
 #' @export
@@ -39,7 +39,7 @@
 #'                   n_breaks = 10, lambda_vals = 10^seq(-6, 6, length.out = 250), min_method = "mean")
 #'
 #'
-fbart = function(y, x, func_data_list,
+fbart = function(y, x = NULL, func_data_list,
                  num_trees = 100, num_samps = 5000, num_burn = 5000,
                  num_thin = 5, num_chains = min(4, dbarts::guessNumCores()),
                  num_threads_bart = min(num_chains, dbarts::guessNumCores()),
@@ -47,27 +47,26 @@ fbart = function(y, x, func_data_list,
                  prior_power = 4, prior_base = 0.95,
                  time_points, break_spacing = "quantiles",
                  n_breaks = 8, lambda_vals = 10^seq(-6, 6, length.out = 100),
-                 min_method = "mean", min_quantile,
-                 manual_breaks) {
+                 min_method = "mean", manual_breaks = NULL, min_quantile = NULL) {
 
   # get b spline coefs
   bspline = get_bspline_coefs(func_data_list = func_data_list, time_points = time_points,
                               break_spacing = break_spacing, n_breaks = n_breaks,
-                              lambda_vals = lambda_vals, min_method = "mean", num_threads = num_threads_wrangle)
+                              manual_breaks = manual_breaks,
+                              lambda_vals = lambda_vals, min_method = min_method,
+                              num_threads = num_threads_wrangle,
+                              min_quantile = min_quantile)
 
   # if available bind scalar covariates with outcome and bspline coefficients
-  if (!missing(x)) {
+  if (!is.null(x)) {
     data_df = cbind(y = y, x, bspline$coef_df)
   } else {
     data_df = cbind(y = y, bspline$coef_df)
   }
 
-
   # bart formula
   formula = as.formula(
-    paste("y ~", paste(paste0("`",
-                              colnames(data_df[, !names(data_df) %in% "y"]),
-                              "`"), collapse = " + ")))
+    paste("y ~", paste(paste0("`", colnames(data_df[, !names(data_df) %in% "y"]), "`"), collapse = " + ")))
 
   # run bart
   bart_run = run_bart(formula, data = data_df,
@@ -77,5 +76,8 @@ fbart = function(y, x, func_data_list,
                       num_threads_wrangle = num_threads_wrangle,
                       prior_power = prior_power, prior_base = prior_base)
 
-  return(bart_run)
+  to_return = list(indicators = bart_run[[1]], splits = bart_run[[2]], bart_model = bart_run[[3]],
+                   basis = bspline[[4]], lambdas = bspline[[3]])
+
+  return(to_return)
 }

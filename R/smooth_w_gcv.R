@@ -13,7 +13,7 @@
 #'
 #'
 smooth_w_gcv = function(covar_df, basis, time_points,
-                        lambda_vals, min_method = "mean", quantile) {
+                        lambda_vals, min_method = "mean", quantile = NULL) {
 
 
 
@@ -24,10 +24,14 @@ smooth_w_gcv = function(covar_df, basis, time_points,
       mean(smooth_covar$gcv)
     })
   } else if (min_method == "quantile") {
+    if (is.null(quantile)) {
+      stop("You must provide a non-null quantile value when min_method = 'quantile'")
+    }
+
     gcv = sapply(lambda_vals, function(lambda) {
       fd = fda::fdPar(basis, Lfdobj = int2Lfd(2), lambda = lambda)
       smooth_covar = fda::smooth.basis(argvals = time_points, y = as.matrix(covar_df), fdParobj = fd)
-      quantile(smooth_covar$gcv, probs = quantile)
+      stats::quantile(smooth_covar$gcv, probs = quantile)
     })
   }
 
