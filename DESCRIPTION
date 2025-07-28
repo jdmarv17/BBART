@@ -1,10 +1,10 @@
 Package: fBART
-Title: Functional Bayesian Additive Regression Trees
+Title: Basis-Expanded Bayesian Additive Regression Trees
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Joshua", "Marvald", , "joshua_marvald@urmc.rochester.edu", role = c("aut", "cre"))
+Description: Fit Bayesian Additive Regreesion Trees using basis-expanded functional
+covariates.
 License: MIT + file LICENSE
 Imports: 
     data.table,
