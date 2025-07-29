@@ -2,6 +2,7 @@
 
 export("%>%")
 export(bbart)
+export(fBARTselect)
 export(get_bspline_coefs)
 export(run_bart)
 export(smooth_w_gcv)

@@ -63,18 +63,18 @@ run_bart = function(formula, data,
       filtered_trees %>%
       dplyr::group_by(.data$tree, .data$sample) %>%
       dplyr::group_split() %>% # list of filtered_tree tibbles by chain, tree, sample
-      parallel::mclapply(function(x) x[,"var"], mc.cores = num_threads_wrangle) %>% # select only var column
+      lapply(function(x) x[,"var"]) %>% # select only var column
       lapply(unlist) %>% # get as vector
       lapply(unname) # get rid of names
   } else{
-  # split up by chain, tree, sample to take advantage of mclapply
-  var_list =
-    filtered_trees %>%
-    dplyr::group_by(.data$chain, .data$tree, .data$sample) %>%
-    dplyr::group_split() %>% # list of filtered_tree tibbles by chain, tree, sample
-    parallel::mclapply(function(x) x[,"var"], mc.cores = num_threads_wrangle) %>% # select only var column
-    lapply(unlist) %>% # get as vector
-    lapply(unname) # get rid of names
+    # split up by chain, tree, sample to take advantage of mclapply
+    var_list =
+      filtered_trees %>%
+      dplyr::group_by(.data$chain, .data$tree, .data$sample) %>%
+      dplyr::group_split() %>% # list of filtered_tree tibbles by chain, tree, sample
+      lapply(function(x) x[,"var"]) %>% # select only var column
+      lapply(unlist) %>% # get as vector
+      lapply(unname) # get rid of names
   }
 
   # run through make_indicators() with mclapply

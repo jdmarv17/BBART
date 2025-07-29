@@ -11,11 +11,8 @@
 #' @export
 #'
 #'
-#'
 smooth_w_gcv = function(covar_df, basis, time_points,
                         lambda_vals, min_method = "mean", quantile = NULL) {
-
-
 
   if (min_method == "mean") {
     gcv = sapply(lambda_vals, function(lambda) {
