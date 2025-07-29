@@ -4,12 +4,12 @@
 \name{fBART-package}
 \alias{fBART}
 \alias{fBART-package}
-\title{fBART: Functional Bayesian Additive Regression Trees}
+\title{fBART: Basis-Expanded Bayesian Additive Regression Trees}
 \description{
-What the package does (one paragraph).
+Fit Bayesian Additive Regreesion Trees using basis-expanded functional covariates.
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Joshua Marvald \email{joshua_marvald@urmc.rochester.edu}
 
 }
 \keyword{internal}

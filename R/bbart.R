@@ -33,13 +33,13 @@
 #' observed_wavelengths = Fatspectrum$x
 #' y = unname(Fatvalues)
 
-#' fbart_run = fbart(y = y, func_data_list = data_list, time_points = observed_wavelengths,
+#' bbart_run = bbart(y = y, func_data_list = data_list, time_points = observed_wavelengths,
 #'                   num_trees = 100, num_samps = 5000, num_burn = 5000, num_thin = 5, num_chains = 1,
 #'                   num_threads_bart = 1, num_threads_wrangle = 1, break_spacing = "quantiles",
 #'                   n_breaks = 10, lambda_vals = 10^seq(-6, 6, length.out = 250), min_method = "mean")
 #'
 #'
-fbart = function(y, x = NULL, func_data_list,
+bbart = function(y, x = NULL, func_data_list,
                  num_trees = 100, num_samps = 5000, num_burn = 5000,
                  num_thin = 5, num_chains = min(4, dbarts::guessNumCores()),
                  num_threads_bart = min(num_chains, dbarts::guessNumCores()),
