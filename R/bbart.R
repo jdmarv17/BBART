@@ -1,4 +1,4 @@
-#' Functional Bayesian Additive Regression Trees (fBART)
+#' Basis-Expanded Bayesian Additive Regression Trees
 #'
 #' @param y A vector of outcome values.
 #' @param x A dataframe of scalar covariates. If 'nxp' then 'y' must have length 'n' and each dataframe in 'func_data_list' must have 'n' columns.

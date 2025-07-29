@@ -1,8 +1,9 @@
+#' BBART: Basis-Expanded Bayesian Additive Regression Trees
+#'
+#' Fit Bayesian Additive Regression Trees using basis-expanded functional covariates.
+#'
+#' @name BBART
 #' @keywords internal
-"_PACKAGE"
-
-## usethis namespace: start
 #' @importFrom fda int2Lfd
 #' @importFrom stats as.formula sd
-## usethis namespace: end
 NULL
