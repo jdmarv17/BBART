@@ -1,11 +1,14 @@
 # BBART (Development Version)
 
-This repository contains all code necessary to replicate analysis in the paper
+This repository contains all code necessary to replicate analysis in the papers
 "Bayesian Additive Regression Trees with Basis-Expanded
 Functional Covariates"[title changed from Functional Bayesian 
-Additive Regression Trees] (Marvald, Love, and Groves, 2025). The
-analysis_files folder contains the data and R script to run the analysis and the necessary
-functions to do so are contained in the R folder.
+Additive Regression Trees] (Marvald, Love, and Groves, 2025) and "Functional
+Variable Selection using Bayesian Additive Regression Trees with Basis-Expanded Functional Covariates" 
+(Marvald, Love, and Groves, 2025). The analysis_files folder contains the data and R scripts to run the
+analyses and the necessary functions are contained in the R folder. 
+'mice_irradiation_analysis' and 'mice_variable_selection' correspond to the analyses from 
+each paper respectively.
 
 Data comes from a Center for Medical Countermeasures Against Radiation Center funded
 project to develop radiation exposure biomarkers and diagnostics. 
