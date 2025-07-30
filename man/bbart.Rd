@@ -75,6 +75,7 @@ Basis-Expanded Bayesian Additive Regression Trees
 library(fds)
 library(fda)
 library(dplyr)
+library(BBART)
 data("Fatspectrum")
 data_list = list(fat = Fatspectrum$y) # list elements must be named
 observed_wavelengths = Fatspectrum$x

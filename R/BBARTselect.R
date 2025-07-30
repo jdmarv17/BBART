@@ -30,7 +30,7 @@
 #' @export
 #'
 #' @examples
-fBARTselect = function(y, x = NULL, func_data_list,
+BBARTselect = function(y, x = NULL, func_data_list,
                        num_trees = 100, num_samps = 5000, num_burn = 5000,
                        num_thin = 5, num_chains = min(4, dbarts::guessNumCores()),
                        num_threads_bart = min(num_chains, dbarts::guessNumCores()),
@@ -89,9 +89,9 @@ fBARTselect = function(y, x = NULL, func_data_list,
   # parallelize BART runs - only use 1 thread if on windows
   if (.Platform$OS.type == "windows" || num_threads_wrangle == 1) {
 
-    null_fbart_list = lapply(arg_lists, function(args) {
+    null_bbart_list = lapply(arg_lists, function(args) {
       tryCatch({
-        do.call(fbart_for_select, args)
+        do.call(bbart_for_select, args)
         cat("Done \n")
       }, error = function(e) {
         cat("Worker error:", conditionMessage(e), "\n")
@@ -99,9 +99,9 @@ fBARTselect = function(y, x = NULL, func_data_list,
       })
     })
   } else {
-    null_fbart_list = parallel::mclapply(arg_lists, function(args) {
+    null_bbart_list = parallel::mclapply(arg_lists, function(args) {
       tryCatch({
-        do.call(fbart_for_select, args)
+        do.call(bbart_for_select, args)
       }, error = function(e) {
         cat("Worker error:", conditionMessage(e), "\n")
         return(NULL)
@@ -110,8 +110,8 @@ fBARTselect = function(y, x = NULL, func_data_list,
   }
 
   # memory issues
-  null_tip_list = lapply(null_fbart_list, function(x) x[["means"]])
-  rm(arg_lists, y_permuted, null_fbart_list)
+  null_tip_list = lapply(null_bbart_list, function(x) x[["means"]])
+  rm(arg_lists, y_permuted, null_bbart_list)
   gc()
 
   # timer stop
@@ -119,15 +119,15 @@ fBARTselect = function(y, x = NULL, func_data_list,
   elapsed = stop - start
 
   # print time info
-  message(sprintf("Amount of time for %d null fBART runs: %s.", num_null_run, format(elapsed)))
-  message(sprintf("Starting real fBART run."))
+  message(sprintf("Amount of time for %d null BBART runs: %s.", num_null_run, format(elapsed)))
+  message(sprintf("Starting real BBART run."))
 
   # convert to dataframe
   tip_df = as.data.frame(do.call(rbind, null_tip_list))
   to_return = list(tip_df = tip_df, elapsed_time_null = elapsed)
 
-  # do real fbart run and get TIPs
-  real_fbart = fbart_for_select(y = y, x = x, func_data_list = func_data_list,
+  # do real bbart run and get TIPs
+  real_bbart = bbart_for_select(y = y, x = x, func_data_list = func_data_list,
                                 num_trees = num_trees, num_samps = num_samps, num_burn = num_burn,
                                 num_thin = num_thin, num_chains = num_chains,
                                 num_threads_bart = num_threads_bart,
@@ -136,18 +136,18 @@ fBARTselect = function(y, x = NULL, func_data_list,
                                 n_breaks = n_breaks, lambda_vals = lambda_vals,
                                 min_method = min_method, manual_breaks = manual_breaks,
                                 min_quantile = min_quantile)
-  real_tip = colMeans(real_fbart[["indicators"]])
+  real_tip = colMeans(real_bbart[["indicators"]])
   to_return$real_tip = real_tip
-  to_return$indicators = real_fbart[["indicators"]]
-  to_return$basis = real_fbart[["basis"]]
-  to_return$data_df = real_fbart[["data_df"]]
+  to_return$indicators = real_bbart[["indicators"]]
+  to_return$basis = real_bbart[["basis"]]
+  to_return$data_df = real_bbart[["data_df"]]
 
   # # get co-inclusions
-  ind_sparse = Matrix(as.matrix(real_fbart[["indicators"]]), sparse = TRUE)
+  ind_sparse = Matrix(as.matrix(real_bbart[["indicators"]]), sparse = TRUE)
   co_occur = summary(t(ind_sparse) %*% ind_sparse)
   co_occur_unique = co_occur[co_occur$i != co_occur$j, ]
-  co_occur_unique$var1 = colnames(real_fbart[["indicators"]])[co_occur_unique$i]
-  co_occur_unique$var2 = colnames(real_fbart[["indicators"]])[co_occur_unique$j]
+  co_occur_unique$var1 = colnames(real_bbart[["indicators"]])[co_occur_unique$i]
+  co_occur_unique$var2 = colnames(real_bbart[["indicators"]])[co_occur_unique$j]
 
   co_occur_unique = co_occur_unique[co_occur_unique$var1 < co_occur_unique$var2, ]
   co_occur_unique$x = co_occur_unique$x / nrow(ind_sparse)
@@ -155,7 +155,7 @@ fBARTselect = function(y, x = NULL, func_data_list,
   colnames(to_return$tree_co_occur) = c("var1", "var2", "co_occurences")
 
   # memory issues
-  rm(real_fbart, ind_sparse, co_occur, co_occur_unique)
+  rm(real_bbart, ind_sparse, co_occur, co_occur_unique)
   gc()
 
   # set to NULL and write over if non-NULL
