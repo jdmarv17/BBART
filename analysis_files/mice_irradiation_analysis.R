@@ -7,7 +7,7 @@ library(doParallel)
 library(parallel)
 library(caret)
 library(randomForest)
-library(fBART)
+library(BBART)
 
 
 load("analysis_files/data/mice_irradiation.rda")
@@ -21,7 +21,7 @@ folds = rep(1:cv_folds, each = 35)
 folds = sample(folds)  # Shuffle the indices
 
 multivar_record = as.data.frame(matrix(nrow = cv_folds, ncol = 3))
-colnames(multivar_record) = c("fbart", "rf", "pfr")
+colnames(multivar_record) = c("bbart", "rf", "pfr")
 
 for (i in 1:cv_folds) {
 
@@ -86,6 +86,8 @@ for (i in 1:cv_folds) {
 }
 
 colMeans(multivar_record)
+
+
 
 
 
